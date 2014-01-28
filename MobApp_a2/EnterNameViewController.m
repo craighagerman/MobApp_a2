@@ -41,16 +41,16 @@
     
     self.recordCount = [self.fetchedRecordsArray count];
     
+    // get a managedObjectContext to work with CoreData
     AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
     self.managedObjectContext = appDelegate.managedObjectContext;
     
-    
     self.foodChoices = @[@"Avacado", @"Broccoli", @"Donuts", @"Flounder", @"Haggis", @"Kumquat", @"McFlurry",  @"Pizza", @"Tortilla", @"Yakisoba", @"Zucchini"];
     
-    
-    
+    // Specification/requirements didn't mention back buttons on this scene, so they are disabled
     [self.navigationItem setHidesBackButton:YES animated:YES];
     
+    // dismiss the keyboard when the user taps on any other area of the screen
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
 }
@@ -63,19 +63,8 @@
 }
 
 
-// ------------------------------------------------------------------
-
-/*
--(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    if([segue.identifier isEqualToString:@"ListViewController"]) {
-        ViewController *vc = segue.destinationViewController;
-        
-        vc.initialRecordLength = self.currentID;
-    }
-}
-*/
-
+#pragma mark -
+#pragma non-generated code
 
 
 -(void)dismissKeyboard {
@@ -83,12 +72,10 @@
     [ageTextfield resignFirstResponder];
 }
 
-
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     return YES;
 }
-
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -98,7 +85,7 @@
 
 - (IBAction) clickedBackground
 {
-    [self.view endEditing:YES]; //make the view end editing!
+    [self.view endEditing:YES];
 
 }
 
@@ -122,39 +109,35 @@
 
 - (IBAction)addNameEntry:(id)sender
 {
-    
-    // Add Entry to Data base
+    /*  Add Entry to Data base
+        Add all entries to Core Data, and then delete the new entries if 'Store' is not tapped on the initial scene.
+        In this case, this is easier than passing messages or objects (say with NSNotification) or creating temp files.
+    */
     Record * newEntry = [NSEntityDescription insertNewObjectForEntityForName:@"Record"
                                                       inManagedObjectContext:self.managedObjectContext];
-
     
+    // Don't add an entry if the user has not entered a name and age
     if (!(([self.nameTextfield.text isEqualToString:@""]) || ([self.ageTextfield.text isEqualToString:@""]))) {
         newEntry.name = self.nameTextfield.text;
-        //newEntry.age =  [NSNumber numberWithInteger: [self.ageTextfield.text integerValue]];
         newEntry.age =  self.ageTextfield.text;
         NSInteger row = [self.foodPicker selectedRowInComponent:0];
         newEntry.favoritefood = self.foodChoices[row];
  
-  
-        
         NSError *error;
         if (![self.managedObjectContext save:&error]) {
             NSLog(@"Error, couldn't save: %@", [error localizedDescription]);
         }
         
+        // Reset the textarea fields and pickerView to their initial state
         self.nameTextfield.text = @"";
         self.ageTextfield.text = @"";
         [self.foodPicker selectRow:0 inComponent:0 animated:YES];
-        
-        
-        NSLog(@"New entry added to Core Data");
     }
 }
 
 
 
-
-
+// Helper function since NSIntegers can't use operator increment.
 - (NSInteger) increment: (NSInteger) nsInt
 {
     int integer = nsInt;
