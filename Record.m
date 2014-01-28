@@ -14,5 +14,6 @@
 @dynamic name;
 @dynamic favoritefood;
 @dynamic age;
+@dynamic uid;
 
 @end

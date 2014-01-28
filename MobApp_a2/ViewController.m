@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "EnterNameViewController.h"
 #import "ListViewController.h"
 #import "Record.h"
 #import "AppDelegate.h"
@@ -15,9 +16,15 @@
 - (void)terminateWithSuccess;
 @end
 
+@class EnterNameViewController;
+
 @interface ViewController ()
 
 @property (nonatomic,strong)NSArray* recordsArray;
+@property BOOL saveNewEntries;
+@property BOOL loadRecords;
+@property int recordLength;
+
 
 @end
 
@@ -26,6 +33,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.saveNewEntries = NO;
+    self.loadRecords = NO;
+    
 	// Do any additional setup after loading the view, typically from a nib.
     AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
     self.managedObjectContext = appDelegate.managedObjectContext;
@@ -33,7 +44,7 @@
     // Fetching Records and saving it in "fetchedRecordsArray" object
     self.fetchedRecordsArray = [appDelegate getAllRecords];
     self.recordsArray = nil;
-    
+    self.recordLength = [self.fetchedRecordsArray count];
 }
 
 - (void)didReceiveMemoryWarning
@@ -47,10 +58,11 @@
 
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    if([segue.identifier isEqualToString:@"ListViewController"]) {
+    if([segue.identifier isEqualToString:@"ListViewController"] && self.loadRecords) {
         ListViewController *lvc = segue.destinationViewController;
         
-        lvc.theFetchedRecordsArray = self.recordsArray;
+        AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+        lvc.theFetchedRecordsArray = [appDelegate getAllRecords];
     }
 }
 
@@ -59,7 +71,7 @@
 
 
 - (IBAction)enterPressed:(id)sender {
-    NSLog((@"Enter Pressed"));
+    self.saveNewEntries = NO;
 }
 
 - (IBAction)viewPressed:(id)sender {
@@ -67,61 +79,28 @@
 }
 
 - (IBAction)storePressed:(id)sender {
-    NSLog((@"store Pressed"));
+    self.saveNewEntries = YES;
     
-    //[[NSNotificationCenter defaultCenter] postNotificationName:@"storeNotification" object:nil];
-    
-    
-    //[self addNameEntry:sender];
-}
-
-- (IBAction)loadPressed:(id)sender {
-    NSLog((@"load Pressed"));
-    
-    self.recordsArray = self.fetchedRecordsArray;
-    
-    /*
     AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
-    // Fetching Records and saving it in "fetchedRecordsArray" object
-    self.fetchedRecordsArray = [appDelegate getAllRecords];
-    */
-    
-    
-    // -----------------------
-    NSLog(@"Core Data holds %lu entries", (unsigned long)[self.fetchedRecordsArray count]  );
-    
-    Record *record = [self.fetchedRecordsArray objectAtIndex:1];
-    
-    NSLog(@"Name: %@", [NSString stringWithFormat:@"%@", record.name] );
-    NSLog(@"Age: %@", [NSString stringWithFormat:@"%@", record.age] );
-    NSLog(@"Food: %@", [NSString stringWithFormat:@"%@", record.favoritefood] );
-    NSLog(@" ------------------------ \n");
-    
-    
-    int noOfEntries = (unsigned int)[self.fetchedRecordsArray count] - 1;
-    for (int row = 0; row <= noOfEntries; row++) {    
-        Record *record = [self.fetchedRecordsArray objectAtIndex:row];
-        
-        NSLog(@"Name: %@", [NSString stringWithFormat:@"%@", record.name] );
-        NSLog(@"Age: %@", [NSString stringWithFormat:@"%@", record.age] );
-        NSLog(@"Food: %@", [NSString stringWithFormat:@"%@", record.favoritefood] );
-        NSLog(@" ------------------------ ");
-    }
-    // -----------------------
-    
+    NSArray *ra = [appDelegate getAllRecords];
+    //NSArray *recordsNow = [appDelegate getAllRecords];
+    self.recordLength = [ra count];
 
-    
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObject:self.fetchedRecordsArray
-                                                         forKey:@"additionalData"];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"MyNotification"
-                                                        object:nil
-                                                      userInfo:userInfo];
-    
-    
 }
+
+
+- (IBAction)loadPressed:(id)sender
+{
+    self.loadRecords = YES;
+    self.recordsArray = self.fetchedRecordsArray;
+}
+
 
 - (IBAction)exitPressed:(id)sender {
     NSLog((@"Exit Pressed"));
+    
+    [self deleteRecentEntries];
+    
     //exit(0);
     //
     [[UIApplication sharedApplication] terminateWithSuccess];
@@ -161,19 +140,54 @@
 
 
 
-
-/*
+-(void)deleteRecentEntries
+{
+    if (! self.saveNewEntries) {
+        NSLog(@"Deleting recent entries");
+        AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
+        NSArray *ra = [appDelegate getAllRecords];
+        NSArray *recordsNow = [appDelegate getAllRecords];
+        
+        for (int row = (int)[recordsNow count]-1; row > self.recordLength-1; row-- ) {
+            Record *record = [ra objectAtIndex:row];
+            [self.managedObjectContext deleteObject:record];
+            [self.managedObjectContext save:nil];
+        
+        }
+        /*
+        // TO DELETE A ROW
+     
+        for (int row = _initialRecordLength; row>= _recordLength; row--) {
+            
+            
+            
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            // Configure the request's entity, and optionally its predicate.
+            
+            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"id" ascending:YES];
+            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+            [fetchRequest setSortDescriptors:sortDescriptors];
+            
+            
+            NSFetchedResultsController *controller = [[NSFetchedResultsController alloc]
+                                                      initWithFetchRequest:fetchRequest
+                                                      managedObjectContext:self.managedObjectContext
+                                                      sectionNameKeyPath:nil
+                                                      cacheName:@"fResults"];
+            
+     
+            //[aContext deleteObject:aManagedObject];
+            
+            //NSManagedObject *managedObject = [controller objectAtIndex:indexPath.row];
+            
+            
+            [self.managedObjectContext deleteObject:record];
+            [self.managedObjectContext save:nil];
+        }
+        */
+    
+    }
  
- // TO DELETE A ROW
- 
- -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath*)indexPath {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- NSManagedObject *managedObject = [self.fetchedResultsController objectAtIndexPath:indexPath];
- [self.managedObjectContext deleteObject:managedObject];
- [self.managedObjectContext save:nil];
- }
- }
- */
-
+}
 
 @end

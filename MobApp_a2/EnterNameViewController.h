@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "Record.h"
+#import "ViewController.h"
 
 @interface EnterNameViewController : UIViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 
@@ -17,6 +18,7 @@
 
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
+@property int currentID;
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField;
 - (IBAction)clickedBackground;

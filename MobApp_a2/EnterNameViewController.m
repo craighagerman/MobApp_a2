@@ -12,8 +12,10 @@
 
 @interface EnterNameViewController ()
 
+@property (nonatomic,strong)NSArray* fetchedRecordsArray;
 @property (strong, nonatomic) IBOutlet UIPickerView *foodPicker;
 @property (strong, nonatomic) NSArray *foodChoices;
+@property NSInteger recordCount;
 
 @end
 
@@ -21,6 +23,7 @@
 @implementation EnterNameViewController
 
 @synthesize nameTextfield, ageTextfield;
+@synthesize currentID;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -35,6 +38,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.recordCount = [self.fetchedRecordsArray count];
     
     AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
     self.managedObjectContext = appDelegate.managedObjectContext;
@@ -59,6 +64,18 @@
 
 
 // ------------------------------------------------------------------
+
+/*
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if([segue.identifier isEqualToString:@"ListViewController"]) {
+        ViewController *vc = segue.destinationViewController;
+        
+        vc.initialRecordLength = self.currentID;
+    }
+}
+*/
+
 
 
 -(void)dismissKeyboard {
@@ -87,38 +104,66 @@
 
 - (IBAction)donePressed:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
+    if (([self.nameTextfield.text isEqualToString:@""]) || ([self.ageTextfield.text isEqualToString:@""])) {
+        [self.view endEditing:YES];
+    }
+    else {
+        [self addNameEntry:sender];
+        [self.view endEditing:YES];
+    }
+}
 
+
+- (IBAction)addNamePressed:(id)sender {
     [self addNameEntry:sender];
 }
 
 
 
-
 - (IBAction)addNameEntry:(id)sender
 {
+    
     // Add Entry to Data base
     Record * newEntry = [NSEntityDescription insertNewObjectForEntityForName:@"Record"
                                                       inManagedObjectContext:self.managedObjectContext];
 
-    newEntry.name = self.nameTextfield.text;
-    //newEntry.age =  [NSNumber numberWithInteger: [self.ageTextfield.text integerValue]];
-    newEntry.age =  self.ageTextfield.text;
-    NSInteger row = [self.foodPicker selectedRowInComponent:0];
-    newEntry.favoritefood = self.foodChoices[row];
+    
+    if (!(([self.nameTextfield.text isEqualToString:@""]) || ([self.ageTextfield.text isEqualToString:@""]))) {
+        newEntry.name = self.nameTextfield.text;
+        //newEntry.age =  [NSNumber numberWithInteger: [self.ageTextfield.text integerValue]];
+        newEntry.age =  self.ageTextfield.text;
+        NSInteger row = [self.foodPicker selectedRowInComponent:0];
+        newEntry.favoritefood = self.foodChoices[row];
  
-    NSError *error;
-    if (![self.managedObjectContext save:&error]) {
-        NSLog(@"Error, couldn't save: %@", [error localizedDescription]);
+  
+        
+        NSError *error;
+        if (![self.managedObjectContext save:&error]) {
+            NSLog(@"Error, couldn't save: %@", [error localizedDescription]);
+        }
+        
+        self.nameTextfield.text = @"";
+        self.ageTextfield.text = @"";
+        [self.foodPicker selectRow:0 inComponent:0 animated:YES];
+        
+        
+        NSLog(@"New entry added to Core Data");
     }
-    
-    //self.foodTextfield.text = @"";
-    //self.ageTextfield = @"";
-    //self.foodChoices = @"";
-    
-    [self.view endEditing:YES];
-    NSLog(@"New entry added to Core Data");
-
 }
+
+
+
+
+
+- (NSInteger) increment: (NSInteger) nsInt
+{
+    int integer = nsInt;
+    integer += 1;
+    NSInteger result = integer;
+    
+    return result;
+}
+
 
 
 

@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-//@interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 @interface ViewController : UIViewController
 
 @property (nonatomic,strong)NSArray* fetchedRecordsArray;
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+@property int initialRecordLength;
 
 - (IBAction)enterPressed:(id)sender;
 - (IBAction)viewPressed:(id)sender;

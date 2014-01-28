@@ -12,8 +12,9 @@
 
 @interface Record : NSManagedObject
 
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSString * favoritefood;
-@property (nonatomic, retain) NSString * age;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *favoritefood;
+@property (nonatomic, retain) NSString *age;
+@property NSInteger uid;
 
 @end
