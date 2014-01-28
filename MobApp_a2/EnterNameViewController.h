@@ -9,10 +9,14 @@
 #import <UIKit/UIKit.h>
 
 
-@interface EnterNameViewController : UIViewController <UITextFieldDelegate>
+@interface EnterNameViewController : UIViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 
 @property (strong, nonatomic) IBOutlet UITextField *name;
 @property (strong, nonatomic) IBOutlet UITextField *age;
+
+
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
+
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField;
 - (IBAction) clickedBackground;

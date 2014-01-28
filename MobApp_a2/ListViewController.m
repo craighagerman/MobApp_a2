@@ -10,6 +10,8 @@
 
 @interface ListViewController ()
 
+@property(copy, nonatomic) NSArray *dwarves;
+
 @end
 
 @implementation ListViewController
@@ -27,6 +29,12 @@
 {
     [super viewDidLoad];
 
+    self.dwarves = @[@"Sleepy", @"Grumpy", @"Bashful", @"Happy"];
+    
+    UITableView *tableView = (id)[self.view viewWithTag:1];
+    UIEdgeInsets contentsInset = tableView.contentInset;
+    contentsInset.top = 20;
+    [tableView setContentInset:contentsInset];
     
 }
 
@@ -37,6 +45,23 @@
 }
 
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [self.dwarves count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *SimpleTableIdentifier = @"SimpleTableIdentifier";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:SimpleTableIdentifier];
+    if(cell == nil) {
+        cell = [[UITableViewCell alloc]
+                initWithStyle:UITableViewCellStyleDefault reuseIdentifier:SimpleTableIdentifier];
+    }
+    
+    cell.textLabel.text = self.dwarves[indexPath.row];
+    return cell;
+}
 
 
 @end
