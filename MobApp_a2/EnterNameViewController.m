@@ -37,8 +37,8 @@
     [super viewDidLoad];
     
     AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
-    
     self.managedObjectContext = appDelegate.managedObjectContext;
+    
     
     self.foodChoices = @[@"Avacado", @"Broccoli", @"Donuts", @"Flounder", @"Haggis", @"Kumquat", @"McFlurry",  @"Pizza", @"Tortilla", @"Yakisoba", @"Zucchini"];
     
@@ -88,14 +88,12 @@
 - (IBAction)donePressed:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
 
-    //NSInteger row = [self.foodPicker selectedRowInComponent:0];
-    //NSString *selected = self.foodChoices[row];
-    //[self addNameEntry:sender];
+    [self addNameEntry:sender];
 }
 
 
 
-/*
+
 - (IBAction)addNameEntry:(id)sender
 {
     // Add Entry to Data base
@@ -121,7 +119,7 @@
     NSLog(@"New entry added to Core Data");
 
 }
-*/
+
 
 
 #pragma mark - 

@@ -8,15 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+//@interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 @interface ViewController : UIViewController
+
+@property (nonatomic,strong)NSArray* fetchedRecordsArray;
+@property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
 - (IBAction)enterPressed:(id)sender;
 - (IBAction)viewPressed:(id)sender;
 - (IBAction)storePressed:(id)sender;
 - (IBAction)loadPressed:(id)sender;
 - (IBAction)exitPressed:(id)sender;
-
-
 
 
 @end

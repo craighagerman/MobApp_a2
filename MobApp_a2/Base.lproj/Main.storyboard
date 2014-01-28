@@ -35,7 +35,7 @@
                                 </state>
                                 <connections>
                                     <action selector="viewPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="x5m-kf-09Q"/>
-                                    <segue destination="wX2-H0-adg" kind="push" id="G87-82-5Ci"/>
+                                    <segue destination="wX2-H0-adg" kind="push" identifier="ListViewController" id="G87-82-5Ci"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a06-y7-OD9">
