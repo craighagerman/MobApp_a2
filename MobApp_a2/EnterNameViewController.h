@@ -11,15 +11,15 @@
 
 @interface EnterNameViewController : UIViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 
-@property (strong, nonatomic) IBOutlet UITextField *name;
-@property (strong, nonatomic) IBOutlet UITextField *age;
-
+@property (strong, nonatomic) IBOutlet UITextField *nameTextfield;
+@property (strong, nonatomic) IBOutlet UITextField *ageTextfield;
+@property (strong, nonatomic) NSString *foodTextfield;
 
 @property (nonatomic, retain) NSManagedObjectContext *managedObjectContext;
 
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField;
-- (IBAction) clickedBackground;
+- (IBAction)clickedBackground;
 - (IBAction)donePressed:(id)sender;
 
 

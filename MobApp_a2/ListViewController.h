@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AppDelegate.h"
+#import "Record.h"
+
 
 @interface ListViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate>
+
+@property (nonatomic,strong)NSArray* fetchedRecordsArray;
 
 @end

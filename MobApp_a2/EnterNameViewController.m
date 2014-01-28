@@ -13,14 +13,14 @@
 @interface EnterNameViewController ()
 
 @property (strong, nonatomic) IBOutlet UIPickerView *foodPicker;
-@property (strong, nonatomic) NSArray *foodNames;
+@property (strong, nonatomic) NSArray *foodChoices;
 
 @end
 
 
 @implementation EnterNameViewController
 
-@synthesize name, age;
+@synthesize nameTextfield, ageTextfield;
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -40,7 +40,7 @@
     
     self.managedObjectContext = appDelegate.managedObjectContext;
     
-    self.foodNames = @[@"Avacado", @"Broccoli", @"Donuts", @"Flounder", @"Haggis", @"Kumquat", @"McFlurry",  @"Pizza", @"Tortilla", @"Yakisoba", @"Zucchini"];
+    self.foodChoices = @[@"Avacado", @"Broccoli", @"Donuts", @"Flounder", @"Haggis", @"Kumquat", @"McFlurry",  @"Pizza", @"Tortilla", @"Yakisoba", @"Zucchini"];
     
     
     
@@ -62,8 +62,8 @@
 
 
 -(void)dismissKeyboard {
-    [name resignFirstResponder];
-    [age resignFirstResponder];
+    [nameTextfield resignFirstResponder];
+    [ageTextfield resignFirstResponder];
 }
 
 
@@ -87,39 +87,39 @@
 
 - (IBAction)donePressed:(id)sender {
     [self.navigationController popViewControllerAnimated:YES];
-    NSLog(@"Done Pressed");
-    NSInteger row = [self.foodPicker selectedRowInComponent:0];
-    NSString *selected = self.foodNames[row];
 
+    //NSInteger row = [self.foodPicker selectedRowInComponent:0];
+    //NSString *selected = self.foodChoices[row];
+    //[self addNameEntry:sender];
 }
 
 
 
 /*
-- (IBAction)addPhoneBookEntry:(id)sender
+- (IBAction)addNameEntry:(id)sender
 {
-    // Add Entry to PhoneBook Data base and reset all fields
-    
-    //  1
+    // Add Entry to Data base
     Record * newEntry = [NSEntityDescription insertNewObjectForEntityForName:@"Record"
                                                       inManagedObjectContext:self.managedObjectContext];
-    //  2
-    newEntry.firstName = self.firstNameTextfield.text;
-    newEntry.lastName = self.lastNameTextfield.text;
-    newEntry.city = self.cityTextfield.text;
-    //  3
+
+    newEntry.name = self.nameTextfield.text;
+    //newEntry.age =  [NSNumber numberWithInteger: [self.ageTextfield.text integerValue]];
+    newEntry.age =  self.ageTextfield.text;
+    NSInteger row = [self.foodPicker selectedRowInComponent:0];
+    newEntry.favoritefood = self.foodChoices[row];
+ 
     NSError *error;
     if (![self.managedObjectContext save:&error]) {
-        NSLog(@"Whoops, couldn't save: %@", [error localizedDescription]);
+        NSLog(@"Error, couldn't save: %@", [error localizedDescription]);
     }
-    //  4
-    self.firstNameTextfield.text = @"";
-    self.lastNameTextfield.text = @"";
-    self.cityTextfield.text = @"";
-    self.phoneNumber1.text = @"";
-    self.phoneNumber2.text = @"";
-    //  5
+    
+    //self.foodTextfield.text = @"";
+    //self.ageTextfield = @"";
+    //self.foodChoices = @"";
+    
     [self.view endEditing:YES];
+    NSLog(@"New entry added to Core Data");
+
 }
 */
 
@@ -133,13 +133,13 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return [self.foodNames count];
+    return [self.foodChoices count];
 }
 
 #pragma mark Picker delegate methods
 -(NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    return self.foodNames[row];
+    return self.foodChoices[row];
 }
 
 

@@ -14,6 +14,6 @@
 
 @property (nonatomic, retain) NSString * name;
 @property (nonatomic, retain) NSString * favoritefood;
-@property (nonatomic, retain) NSNumber * age;
+@property (nonatomic, retain) NSString * age;
 
 @end
