@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MobApp_a2/EnterNameViewController.m"
-            timestampString = "412634502.567368"
+            timestampString = "412638615.852267"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "137"
-            endingLineNumber = "137"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
             landmarkName = "-addNameEntry:"
             landmarkType = "5">
          </BreakpointContent>

@@ -67,23 +67,17 @@
 }
 
 
-
-
-
 - (IBAction)enterPressed:(id)sender {
     self.saveNewEntries = NO;
 }
 
 - (IBAction)viewPressed:(id)sender {
-    NSLog((@"view Pressed"));
 }
 
 - (IBAction)storePressed:(id)sender {
     self.saveNewEntries = YES;
-    
     AppDelegate* appDelegate = [UIApplication sharedApplication].delegate;
     NSArray *ra = [appDelegate getAllRecords];
-    //NSArray *recordsNow = [appDelegate getAllRecords];
     self.recordLength = [ra count];
 
 }
@@ -96,47 +90,17 @@
 }
 
 
-- (IBAction)exitPressed:(id)sender {
-    NSLog((@"Exit Pressed"));
-    
+- (IBAction)exitPressed:(id)sender
+{
     [self deleteRecentEntries];
     
     //exit(0);
-    //
+    // This is a private / unpublished API not allowed by Apple
+    // It is used here because if is in the assignment requirements
+    // but could not be used in shipping code.
     [[UIApplication sharedApplication] terminateWithSuccess];
     
 }
-
-
-/*
-- (IBAction)addNameEntry:(id)sender
-{
-    // Add Entry to Data base
-    Record * newEntry = [NSEntityDescription insertNewObjectForEntityForName:@"Record"
-                                                      inManagedObjectContext:self.managedObjectContext];
-    
-    newEntry.name = self.nameTextfield.text;
-    //newEntry.age =  [NSNumber numberWithInteger: [self.ageTextfield.text integerValue]];
-    newEntry.age =  self.ageTextfield.text;
-    NSInteger row = [self.foodPicker selectedRowInComponent:0];
-    newEntry.favoritefood = self.foodChoices[row];
-    
-    NSError *error;
-    if (![self.managedObjectContext save:&error]) {
-        NSLog(@"Error, couldn't save: %@", [error localizedDescription]);
-    }
-    
-    //self.foodTextfield.text = @"";
-    //self.ageTextfield = @"";
-    //self.foodChoices = @"";
-    
-   
-    [self.view endEditing:YES];
-    NSLog(@"New entry added to Core Data");
-    
-}
- */
-
 
 
 
@@ -152,40 +116,7 @@
             Record *record = [ra objectAtIndex:row];
             [self.managedObjectContext deleteObject:record];
             [self.managedObjectContext save:nil];
-        
         }
-        /*
-        // TO DELETE A ROW
-     
-        for (int row = _initialRecordLength; row>= _recordLength; row--) {
-            
-            
-            
-            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-            // Configure the request's entity, and optionally its predicate.
-            
-            NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"id" ascending:YES];
-            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-            [fetchRequest setSortDescriptors:sortDescriptors];
-            
-            
-            NSFetchedResultsController *controller = [[NSFetchedResultsController alloc]
-                                                      initWithFetchRequest:fetchRequest
-                                                      managedObjectContext:self.managedObjectContext
-                                                      sectionNameKeyPath:nil
-                                                      cacheName:@"fResults"];
-            
-     
-            //[aContext deleteObject:aManagedObject];
-            
-            //NSManagedObject *managedObject = [controller objectAtIndex:indexPath.row];
-            
-            
-            [self.managedObjectContext deleteObject:record];
-            [self.managedObjectContext save:nil];
-        }
-        */
-    
     }
  
 }
