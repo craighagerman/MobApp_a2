@@ -140,7 +140,7 @@
 // Helper function since NSIntegers can't use operator increment.
 - (NSInteger) increment: (NSInteger) nsInt
 {
-    int integer = nsInt;
+    int integer = (int)nsInt;
     integer += 1;
     NSInteger result = integer;
     

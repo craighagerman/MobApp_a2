@@ -11,10 +11,12 @@
 
 @implementation AppDelegate
 
+// ------------- Needed for Core Data ------------------
 @synthesize managedObjectContext = _managedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
-
+// -----------------------------------------------------
+    
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
